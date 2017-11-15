@@ -1,13 +1,10 @@
 const messages = require('./messages');
-
-const onMessage = (message) => {
-  console.log(message);
-}
+const aggregation = require('./aggregation');
 
 const init = (async () => {
   await messages.connect();
   await messages.consume()
-    .on('message', onMessage);
+    .on('message', aggregation);
 })();
 
 init.then(() => {
