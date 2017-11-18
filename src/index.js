@@ -1,7 +1,7 @@
 const messages = require('./messages');
 const aggregation = require('./aggregation');
 
-const init = (async () => {
+/* const init = (async () => {
   await messages.connect();
   await messages.consume()
     .on('message', aggregation);
@@ -9,4 +9,8 @@ const init = (async () => {
 
 init.then(() => {
   console.log('Wait for commands');
-}, console.error.bind(console));
+}, console.error.bind(console)); */
+
+(async () => {
+  await aggregation();
+})();

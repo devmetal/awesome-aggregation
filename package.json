@@ -16,6 +16,8 @@
   "dependencies": {
     "amqplib": "^0.5.2",
     "bunyan": "^1.8.12",
+    "convict": "^4.0.1",
+    "file-exists": "^5.0.0",
     "mongoose": "^4.13.2"
   }
 }

@@ -1,26 +1,27 @@
 const amqp = require('amqplib');
 const { EventEmitter } = require('events');
+const config = require('../config');
 
-const queue = process.env.AGGREGATION_QUEUE;
-const rabbitUrl = 'amqp://guest:guest@localhost';
+const rabbitConf = config.get('rabbit');
+const {
+  user,
+  pass,
+  host,
+  aggregationQueue,
+} = rabbitConf;
 
-let connection;
-
-const connect = async () => amqp.connect(rabbitUrl);
+const rabbitUri = `ampq://${user}:${pass}@${host}`;
 
 exports.consume = async () => {
-  if (!connection) {
-    connection = await connect();
-  }
-  
+  const connection = await amqp.connect(rabbitUri);
   const channel = await connection.createChannel();
-  await channel.assertQueue(queue);
+
+  await channel.assertQueue(aggregationQueue);
 
   const events = new EventEmitter();
+  const handler = events.emit.bind(events, 'message');
 
-  channel.consume(queue, events.emit.bind(events, 'message'));
+  channel.consume(aggregationQueue, handler);
 
   return events;
 };
-
-exports.connect = connect;
